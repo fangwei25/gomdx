@@ -3,7 +3,7 @@ package mdx_cfg
 type TimeType int
 
 const (
-	Total = TimeType(iota)
+	Ever = TimeType(iota)
 	Year
 	Month
 	Day
@@ -24,12 +24,13 @@ var DefaultEventCfg = &EventCfg{}
 
 func init() {
 	DefaultEventCfg.TimeCfgList = make([]*TimeCfg, 1)
-	DefaultEventCfg.TimeCfgList[0].Type = Total
+	DefaultEventCfg.TimeCfgList[0].Type = Ever
 	DefaultEventCfg.TimeCfgList[0].LiftTime = -1
 	DefaultEventCfg.TimeCfgList[0].CalcList = []CalcType{Count, Value}
 }
 
 type Cfg struct {
+	KeyPrefix string //数据key前缀
 	EventCfgs map[string]*EventCfg
 }
 
