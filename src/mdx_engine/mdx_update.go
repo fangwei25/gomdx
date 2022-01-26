@@ -26,15 +26,15 @@ func (e *Engine) Update(ownerId int32, eventType string, field string, value int
 func (e Engine) UpdateByTimeDimension(key, field string, value int64, expire time.Duration, calcTypes []mdx_cfg.CalcType) {
 	var err error
 	for _, calcType := range calcTypes {
-		fieldExt := field + "-" + string(calcType)
+		fieldExt := e.GenField(field, calcType)
 		switch calcType {
-		case mdx_cfg.Count:
+		case mdx_cfg.CTCount:
 			_, err = e.DS.Increase(key, fieldExt, 1, expire)
-		case mdx_cfg.Value:
+		case mdx_cfg.CTValue:
 			_, err = e.DS.Increase(key, fieldExt, value, expire)
-		case mdx_cfg.Max:
+		case mdx_cfg.CTMax:
 			_, err = e.DS.UpdateMax(key, fieldExt, value, expire)
-		case mdx_cfg.Min:
+		case mdx_cfg.CTMin:
 			_, err = e.DS.UpdateMinus(key, fieldExt, value, expire)
 		}
 		if err != nil {

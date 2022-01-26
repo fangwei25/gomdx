@@ -1,32 +1,32 @@
 package mdx_cfg
 
-type TimeType int
+type TimeDimension int
 
 const (
-	Ever = TimeType(iota)
-	Year
-	Month
-	Day
-	Hour
-	Minute
+	TDEver = TimeDimension(iota)
+	TDYear
+	TDMonth
+	TDDay
+	TDHour
+	TDMinute
 )
 
 type CalcType string
 
 const (
-	Count = CalcType("count")
-	Value = CalcType("value")
-	Max   = CalcType("max")
-	Min   = CalcType("min")
+	CTCount = CalcType("count")
+	CTValue = CalcType("value")
+	CTMax   = CalcType("max")
+	CTMin   = CalcType("min")
 )
 
 var DefaultEventCfg = &EventCfg{}
 
 func init() {
 	DefaultEventCfg.TimeCfgList = make([]*TimeCfg, 1)
-	DefaultEventCfg.TimeCfgList[0].Type = Ever
+	DefaultEventCfg.TimeCfgList[0].Type = TDEver
 	DefaultEventCfg.TimeCfgList[0].LiftTime = -1
-	DefaultEventCfg.TimeCfgList[0].CalcList = []CalcType{Count, Value}
+	DefaultEventCfg.TimeCfgList[0].CalcList = []CalcType{CTCount, CTValue}
 }
 
 type Cfg struct {
@@ -40,7 +40,7 @@ type EventCfg struct {
 }
 
 type TimeCfg struct {
-	Type     TimeType
+	Type     TimeDimension
 	LiftTime int32
 	CalcList []CalcType
 }

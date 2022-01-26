@@ -10,7 +10,7 @@ const KeyPatton = "mdx-%s-%d-%s-%s" //mdx-key前缀-ownerId-eventType-time(根�
 const totalCounterField = "total"
 
 const (
-	timeFormatPattonEver   = "0"
+	timeFormatEver         = "0"
 	timeFormatPattonYear   = "2006"
 	timeFormatPattonMonth  = "2006-01"
 	timeFormatPattonDay    = "2006-01-02"
@@ -18,39 +18,48 @@ const (
 	timeFormatPattonMinute = "2006-01-02-15-04"
 )
 
-var TFPMap map[mdx_cfg.TimeType]string
+var TFPMap map[mdx_cfg.TimeDimension]string
 
 func init() {
-	TFPMap = make(map[mdx_cfg.TimeType]string)
-	TFPMap[mdx_cfg.Ever] = timeFormatPattonEver
-	TFPMap[mdx_cfg.Year] = timeFormatPattonYear
-	TFPMap[mdx_cfg.Month] = timeFormatPattonMonth
-	TFPMap[mdx_cfg.Day] = timeFormatPattonDay
-	TFPMap[mdx_cfg.Hour] = timeFormatPattonHour
-	TFPMap[mdx_cfg.Minute] = timeFormatPattonMinute
+	TFPMap = make(map[mdx_cfg.TimeDimension]string)
+	//TFPMap[mdx_cfg.TDEver] = timeFormatEver
+	TFPMap[mdx_cfg.TDYear] = timeFormatPattonYear
+	TFPMap[mdx_cfg.TDMonth] = timeFormatPattonMonth
+	TFPMap[mdx_cfg.TDDay] = timeFormatPattonDay
+	TFPMap[mdx_cfg.TDHour] = timeFormatPattonHour
+	TFPMap[mdx_cfg.TDMinute] = timeFormatPattonMinute
 }
 
-func (e *Engine) GenKey(ownerId int32, eventType string, timeType mdx_cfg.TimeType, t time.Time) string {
-	tfp := TFPMap[timeType]
-	key := fmt.Sprintf(e.Cfg.KeyPrefix, KeyPatton, ownerId, eventType, t.Format(tfp))
+func (e *Engine) GenKey(ownerId int32, eventType string, timeDimension mdx_cfg.TimeDimension, t time.Time) string {
+	var key string
+	if timeDimension == mdx_cfg.TDEver {
+		key = fmt.Sprintf(e.Cfg.KeyPrefix, KeyPatton, ownerId, eventType, timeFormatEver)
+	} else {
+		tfp := TFPMap[timeDimension]
+		key = fmt.Sprintf(e.Cfg.KeyPrefix, KeyPatton, ownerId, eventType, t.Format(tfp))
+	}
 	return key
 }
 
-func (e *Engine) GetLifeTime(timeType mdx_cfg.TimeType, cfgValue int32) time.Duration {
-	switch timeType {
-	case mdx_cfg.Ever:
+func (e *Engine) GenField(field string, calcType mdx_cfg.CalcType) string {
+	return field + "-" + string(calcType)
+}
+
+func (e *Engine) GetLifeTime(timeDimension mdx_cfg.TimeDimension, cfgValue int32) time.Duration {
+	switch timeDimension {
+	case mdx_cfg.TDEver:
 		return -1
-	case mdx_cfg.Year:
+	case mdx_cfg.TDYear:
 		return time.Duration(cfgValue) * time.Hour * 24 * 365
-	case mdx_cfg.Month:
+	case mdx_cfg.TDMonth:
 		return time.Duration(cfgValue) * time.Hour * 24 * 30
-	case mdx_cfg.Day:
+	case mdx_cfg.TDDay:
 		return time.Duration(cfgValue) * time.Hour * 24
-	case mdx_cfg.Hour:
+	case mdx_cfg.TDHour:
 		return time.Duration(cfgValue) * time.Hour
-	case mdx_cfg.Minute:
+	case mdx_cfg.TDMinute:
 		return time.Duration(cfgValue) * time.Minute
 	}
-	fmt.Printf("GetLifeTime failed, no timeType hit: %d", timeType)
+	fmt.Printf("GetLifeTime failed, no timeDimension hit: %d", timeDimension)
 	return -1
 }
