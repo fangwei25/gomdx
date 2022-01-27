@@ -33,10 +33,10 @@ func init() {
 func (e *Engine) GenKey(ownerId int32, eventType string, timeDimension mdx_cfg.TimeDimension, t time.Time) string {
 	var key string
 	if timeDimension == mdx_cfg.TDEver {
-		key = fmt.Sprintf(e.Cfg.KeyPrefix, KeyPatton, ownerId, eventType, timeFormatEver)
+		key = fmt.Sprintf(KeyPatton, e.Cfg.KeyPrefix, ownerId, eventType, timeFormatEver)
 	} else {
 		tfp := TFPMap[timeDimension]
-		key = fmt.Sprintf(e.Cfg.KeyPrefix, KeyPatton, ownerId, eventType, t.Format(tfp))
+		key = fmt.Sprintf(KeyPatton, e.Cfg.KeyPrefix, ownerId, eventType, t.Format(tfp))
 	}
 	return key
 }

@@ -23,10 +23,12 @@ const (
 var DefaultEventCfg = &EventCfg{}
 
 func init() {
-	DefaultEventCfg.TimeCfgList = make([]*TimeCfg, 1)
-	DefaultEventCfg.TimeCfgList[0].Type = TDEver
-	DefaultEventCfg.TimeCfgList[0].LiftTime = -1
-	DefaultEventCfg.TimeCfgList[0].CalcList = []CalcType{CTCount, CTValue}
+	DefaultEventCfg.TimeCfgList = make([]*TimeCfg, 0)
+	DefaultEventCfg.TimeCfgList = append(DefaultEventCfg.TimeCfgList, &TimeCfg{
+		Type:     TDEver,
+		LiftTime: -1,
+		CalcList: []CalcType{CTCount, CTValue},
+	})
 }
 
 type Cfg struct {

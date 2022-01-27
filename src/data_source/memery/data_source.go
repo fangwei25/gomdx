@@ -1,4 +1,4 @@
-package redis
+package memery
 
 import (
 	"errors"

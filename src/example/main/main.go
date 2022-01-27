@@ -1,13 +1,16 @@
-package example
+package main
 
 import (
-	"github.com/fangwei25/gomdx/src/data_source/redis"
+	"fmt"
+	"github.com/fangwei25/gomdx/src/data_source/memery"
 	"github.com/fangwei25/gomdx/src/mdx_cfg"
 	"github.com/fangwei25/gomdx/src/mdx_engine"
 )
 
 func main() {
-	engine := mdx_engine.CreateEngine(redis.CreateDataSource(), &mdx_cfg.Cfg{EventCfgs: map[string]*mdx_cfg.EventCfg{}})
+	//engine := mdx_engine.CreateEngine(redis.CreateDataSource(), &mdx_cfg.Cfg{EventCfgs: map[string]*mdx_cfg.EventCfg{}})
+	fmt.Println("example start")
+	engine := mdx_engine.CreateEngine(memery.CreateDataSource(), &mdx_cfg.Cfg{EventCfgs: map[string]*mdx_cfg.EventCfg{}, KeyPrefix: "BB"})
 	engine.Update(123, "test1", "first", 1)
 	engine.Update(123, "test1", "first", 2)
 	engine.Update(123, "test1", "first", 3)
