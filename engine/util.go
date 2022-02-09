@@ -1,8 +1,8 @@
-package mdx_engine
+package engine
 
 import (
 	"fmt"
-	"github.com/fangwei25/gomdx/src/mdx_cfg"
+	"github.com/fangwei25/gomdx/cfg"
 	"time"
 )
 
@@ -18,21 +18,21 @@ const (
 	timeFormatPattonMinute = "2006-01-02-15-04"
 )
 
-var TFPMap map[mdx_cfg.TimeDimension]string
+var TFPMap map[cfg.TimeDimension]string
 
 func init() {
-	TFPMap = make(map[mdx_cfg.TimeDimension]string)
-	//TFPMap[mdx_cfg.TDEver] = timeFormatEver
-	TFPMap[mdx_cfg.TDYear] = timeFormatPattonYear
-	TFPMap[mdx_cfg.TDMonth] = timeFormatPattonMonth
-	TFPMap[mdx_cfg.TDDay] = timeFormatPattonDay
-	TFPMap[mdx_cfg.TDHour] = timeFormatPattonHour
-	TFPMap[mdx_cfg.TDMinute] = timeFormatPattonMinute
+	TFPMap = make(map[cfg.TimeDimension]string)
+	//TFPMap[cfg.TDEver] = timeFormatEver
+	TFPMap[cfg.TDYear] = timeFormatPattonYear
+	TFPMap[cfg.TDMonth] = timeFormatPattonMonth
+	TFPMap[cfg.TDDay] = timeFormatPattonDay
+	TFPMap[cfg.TDHour] = timeFormatPattonHour
+	TFPMap[cfg.TDMinute] = timeFormatPattonMinute
 }
 
-func (e *Engine) GenKey(ownerId int32, eventType string, timeDimension mdx_cfg.TimeDimension, t time.Time) string {
+func (e *Engine) GenKey(ownerId int32, eventType string, timeDimension cfg.TimeDimension, t time.Time) string {
 	var key string
-	if timeDimension == mdx_cfg.TDEver {
+	if timeDimension == cfg.TDEver {
 		key = fmt.Sprintf(KeyPatton, e.Cfg.KeyPrefix, ownerId, eventType, timeFormatEver)
 	} else {
 		tfp := TFPMap[timeDimension]
@@ -41,23 +41,23 @@ func (e *Engine) GenKey(ownerId int32, eventType string, timeDimension mdx_cfg.T
 	return key
 }
 
-func (e *Engine) GenField(field string, calcType mdx_cfg.CalcType) string {
+func (e *Engine) GenField(field string, calcType cfg.CalcType) string {
 	return field + "-" + string(calcType)
 }
 
-func (e *Engine) GetLifeTime(timeDimension mdx_cfg.TimeDimension, cfgValue int32) time.Duration {
+func (e *Engine) GetLifeTime(timeDimension cfg.TimeDimension, cfgValue int32) time.Duration {
 	switch timeDimension {
-	case mdx_cfg.TDEver:
+	case cfg.TDEver:
 		return -1
-	case mdx_cfg.TDYear:
+	case cfg.TDYear:
 		return time.Duration(cfgValue) * time.Hour * 24 * 365
-	case mdx_cfg.TDMonth:
+	case cfg.TDMonth:
 		return time.Duration(cfgValue) * time.Hour * 24 * 30
-	case mdx_cfg.TDDay:
+	case cfg.TDDay:
 		return time.Duration(cfgValue) * time.Hour * 24
-	case mdx_cfg.TDHour:
+	case cfg.TDHour:
 		return time.Duration(cfgValue) * time.Hour
-	case mdx_cfg.TDMinute:
+	case cfg.TDMinute:
 		return time.Duration(cfgValue) * time.Minute
 	}
 	fmt.Printf("GetLifeTime failed, no timeDimension hit: %d", timeDimension)

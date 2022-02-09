@@ -3,16 +3,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/fangwei25/gomdx/src/data_source/memery"
-	"github.com/fangwei25/gomdx/src/mdx_cfg"
-	"github.com/fangwei25/gomdx/src/mdx_engine"
+	"github.com/fangwei25/gomdx/cfg"
+	"github.com/fangwei25/gomdx/datasource/memery"
+	"github.com/fangwei25/gomdx/engine"
 	"time"
 )
 
 func main() {
-	//engine := mdx_engine.CreateEngine(redis.CreateDataSource(), &mdx_cfg.Cfg{EventCfgs: map[string]*mdx_cfg.EventCfg{}})
+	//engine := engine.CreateEngine(redis.CreateDataSource(), &cfg.Cfg{EventCfgs: map[string]*cfg.EventCfg{}})
 	fmt.Println("example start")
-	engine := mdx_engine.CreateEngine(memery.CreateDataSource(), &mdx_cfg.Cfg{EventCfgs: map[string]*mdx_cfg.EventCfg{}, KeyPrefix: "BB"})
+	engine := engine.CreateEngine(memery.CreateDataSource(), &cfg.Cfg{EventCfgs: map[string]*cfg.EventCfg{}, KeyPrefix: "BB"})
 	ownerId := int32(123)
 	eventType1 := "test"
 	engine.Update(ownerId, eventType1, "first", 1)
@@ -34,14 +34,14 @@ func main() {
 
 	//动态添加一个配置
 	eventType3 := "god"
-	eventCfg := &mdx_cfg.EventCfg{
+	eventCfg := &cfg.EventCfg{
 		EventType:   eventType3,
-		TimeCfgList: make(map[mdx_cfg.TimeDimension]*mdx_cfg.TimeCfg),
+		TimeCfgList: make(map[cfg.TimeDimension]*cfg.TimeCfg),
 	}
-	eventCfg.TimeCfgList[mdx_cfg.TDMinute] = &mdx_cfg.TimeCfg{
-		Type:     mdx_cfg.TDMinute,
+	eventCfg.TimeCfgList[cfg.TDMinute] = &cfg.TimeCfg{
+		Type:     cfg.TDMinute,
 		LiftTime: 1,
-		CalcList: map[mdx_cfg.CalcType]bool{mdx_cfg.CTCount: true, mdx_cfg.CTValue: true, mdx_cfg.CTMax: true, mdx_cfg.CTMin: true},
+		CalcList: map[cfg.CalcType]bool{cfg.CTCount: true, cfg.CTValue: true, cfg.CTMax: true, cfg.CTMin: true},
 	}
 
 	engine.Cfg.Add(eventCfg)
@@ -49,7 +49,7 @@ func main() {
 	engine.Update(ownerId, eventType3, "new", 2)
 	engine.Update(ownerId, eventType3, "new", 5)
 
-	res, _ := engine.QueryOne(ownerId, eventType3, "new", mdx_cfg.TDMinute, time.Now())
+	res, _ := engine.QueryOne(ownerId, eventType3, "new", cfg.TDMinute, time.Now())
 	resByte, _ := json.Marshal(res)
 	fmt.Println(string(resByte))
 

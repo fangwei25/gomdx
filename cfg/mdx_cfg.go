@@ -1,4 +1,4 @@
-package mdx_cfg
+package cfg
 
 import "sync"
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/fangwei25/gomdx/src/utils"
+	"github.com/fangwei25/gomdx/utils"
 	"github.com/go-redis/redis/v8"
 	"strconv"
 	"time"

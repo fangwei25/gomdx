@@ -1,8 +1,8 @@
-package mdx_engine
+package engine
 
 import (
 	"fmt"
-	"github.com/fangwei25/gomdx/src/mdx_cfg"
+	"github.com/fangwei25/gomdx/cfg"
 	"time"
 )
 
@@ -12,7 +12,7 @@ func (e *Engine) Update(ownerId int32, eventType string, field string, value int
 	eventCfg := e.Cfg.Get(eventType)
 	if nil == eventCfg {
 		//未配置的事件类型，则用默认配置： 时间维度=永久，计算维度=累加值、累加计数
-		eventCfg = mdx_cfg.DefaultEventCfg
+		eventCfg = cfg.DefaultEventCfg
 	}
 
 	nonce := time.Now()
@@ -23,18 +23,18 @@ func (e *Engine) Update(ownerId int32, eventType string, field string, value int
 	}
 }
 
-func (e Engine) UpdateByTimeDimension(key, field string, value int64, expire time.Duration, calcTypes map[mdx_cfg.CalcType]bool) {
+func (e Engine) UpdateByTimeDimension(key, field string, value int64, expire time.Duration, calcTypes map[cfg.CalcType]bool) {
 	var err error
 	for calcType, _ := range calcTypes {
 		fieldExt := e.GenField(field, calcType)
 		switch calcType {
-		case mdx_cfg.CTCount:
+		case cfg.CTCount:
 			_, err = e.DS.Increase(key, fieldExt, 1, expire)
-		case mdx_cfg.CTValue:
+		case cfg.CTValue:
 			_, err = e.DS.Increase(key, fieldExt, value, expire)
-		case mdx_cfg.CTMax:
+		case cfg.CTMax:
 			_, err = e.DS.UpdateMax(key, fieldExt, value, expire)
-		case mdx_cfg.CTMin:
+		case cfg.CTMin:
 			_, err = e.DS.UpdateMinus(key, fieldExt, value, expire)
 		}
 		if err != nil {
