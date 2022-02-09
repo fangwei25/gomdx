@@ -24,7 +24,7 @@ func (e *Engine) Update(ownerId int32, eventType string, field string, value int
 
 func (e Engine) UpdateByTimeDimension(key, field string, value int64, expire time.Duration, calcTypes map[CalcType]bool) {
 	var err error
-	for calcType, _ := range calcTypes {
+	for calcType := range calcTypes {
 		fieldExt := e.GenField(field, calcType)
 		switch calcType {
 		case CTCount:
