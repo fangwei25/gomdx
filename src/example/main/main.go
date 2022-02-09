@@ -1,29 +1,62 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/fangwei25/gomdx/src/data_source/memery"
 	"github.com/fangwei25/gomdx/src/mdx_cfg"
 	"github.com/fangwei25/gomdx/src/mdx_engine"
+	"time"
 )
 
 func main() {
 	//engine := mdx_engine.CreateEngine(redis.CreateDataSource(), &mdx_cfg.Cfg{EventCfgs: map[string]*mdx_cfg.EventCfg{}})
 	fmt.Println("example start")
 	engine := mdx_engine.CreateEngine(memery.CreateDataSource(), &mdx_cfg.Cfg{EventCfgs: map[string]*mdx_cfg.EventCfg{}, KeyPrefix: "BB"})
-	engine.Update(123, "test1", "first", 1)
-	engine.Update(123, "test1", "first", 2)
-	engine.Update(123, "test1", "first", 3)
+	ownerId := int32(123)
+	eventType1 := "test"
+	engine.Update(ownerId, eventType1, "first", 1)
+	engine.Update(ownerId, eventType1, "first", 2)
+	engine.Update(ownerId, eventType1, "first", 3)
 
-	engine.Update(123, "test1", "second", 4)
-	engine.Update(123, "test1", "second", 5)
-	engine.Update(123, "test1", "second", 6)
+	engine.Update(ownerId, eventType1, "second", 4)
+	engine.Update(ownerId, eventType1, "second", 5)
+	engine.Update(ownerId, eventType1, "second", 6)
 
-	engine.Update(123, "dev", "one", 1)
-	engine.Update(123, "dev", "one", 2)
-	engine.Update(123, "dev", "one", 3)
+	eventType2 := "hello"
+	engine.Update(ownerId, eventType2, "one", 1)
+	engine.Update(ownerId, eventType2, "one", 2)
+	engine.Update(ownerId, eventType2, "one", 3)
 
-	engine.Update(123, "dev", "two", 4)
-	engine.Update(123, "dev", "two", 5)
-	engine.Update(123, "dev", "two", 6)
+	engine.Update(ownerId, eventType2, "two", 4)
+	engine.Update(ownerId, eventType2, "two", 5)
+	engine.Update(ownerId, eventType2, "two", 6)
+
+	//动态添加一个配置
+	eventType3 := "god"
+	eventCfg := &mdx_cfg.EventCfg{
+		EventType:   eventType3,
+		TimeCfgList: make([]*mdx_cfg.TimeCfg, 0),
+	}
+	eventCfg.TimeCfgList = append(eventCfg.TimeCfgList, &mdx_cfg.TimeCfg{
+		Type:     mdx_cfg.TDMinute,
+		LiftTime: 1,
+		CalcList: []mdx_cfg.CalcType{mdx_cfg.CTCount, mdx_cfg.CTValue, mdx_cfg.CTMax, mdx_cfg.CTMin},
+	})
+
+	engine.Cfg.Add(eventCfg)
+	engine.Update(ownerId, eventType3, "new", 1)
+	engine.Update(ownerId, eventType3, "new", 2)
+	engine.Update(ownerId, eventType3, "new", 5)
+
+	res, _ := engine.QueryOne(ownerId, eventType3, "new", mdx_cfg.TDMinute, time.Now())
+	resByte, _ := json.Marshal(res)
+	fmt.Println(string(resByte))
+
+	pause := make(chan bool)
+	go func() {
+		time.Sleep(100 * time.Second)
+		pause <- true
+	}()
+	<-pause
 }

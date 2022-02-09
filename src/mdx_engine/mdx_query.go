@@ -6,10 +6,10 @@ import (
 )
 
 type ResultData struct {
-	Count int64
-	Value int64
-	Max   int64
-	Min   int64
+	Count int64 `json:"count,omitempty"`
+	Value int64 `json:"value,omitempty"`
+	Max   int64 `json:"max,omitempty"`
+	Min   int64 `json:"min,omitempty"`
 }
 
 // QueryOne 查询一个数据

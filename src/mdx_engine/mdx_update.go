@@ -9,8 +9,8 @@ import (
 // Update 数值统计 按照给定的数值进行累加统计
 func (e *Engine) Update(ownerId int32, eventType string, field string, value int64) {
 	//根据配置决定统计的计算维度（累加，计数，记录最大值，记录最小值）和时间维度(总，年，月，日，小时，分)
-	eventCfg, ok := e.Cfg.EventCfgs[eventType]
-	if !ok {
+	eventCfg := e.Cfg.Get(eventType)
+	if nil == eventCfg {
 		//未配置的事件类型，则用默认配置： 时间维度=永久，计算维度=累加值、累加计数
 		eventCfg = mdx_cfg.DefaultEventCfg
 	}
