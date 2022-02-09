@@ -3,16 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/fangwei25/gomdx/cfg"
+	"github.com/fangwei25/gomdx"
 	"github.com/fangwei25/gomdx/datasource/memery"
-	"github.com/fangwei25/gomdx/engine"
 	"time"
 )
 
 func main() {
 	//engine := engine.CreateEngine(redis.CreateDataSource(), &cfg.Cfg{EventCfgs: map[string]*cfg.EventCfg{}})
 	fmt.Println("example start")
-	engine := engine.CreateEngine(memery.CreateDataSource(), &cfg.Cfg{EventCfgs: map[string]*cfg.EventCfg{}, KeyPrefix: "BB"})
+	engine := gomdx.CreateEngine(memery.CreateDataSource(), &gomdx.Cfg{EventCfgs: map[string]*gomdx.EventCfg{}, KeyPrefix: "BB"})
 	ownerId := int32(123)
 	eventType1 := "test"
 	engine.Update(ownerId, eventType1, "first", 1)
@@ -34,14 +33,14 @@ func main() {
 
 	//动态添加一个配置
 	eventType3 := "god"
-	eventCfg := &cfg.EventCfg{
+	eventCfg := &gomdx.EventCfg{
 		EventType:   eventType3,
-		TimeCfgList: make(map[cfg.TimeDimension]*cfg.TimeCfg),
+		TimeCfgList: make(map[gomdx.TimeDimension]*gomdx.TimeCfg),
 	}
-	eventCfg.TimeCfgList[cfg.TDMinute] = &cfg.TimeCfg{
-		Type:     cfg.TDMinute,
+	eventCfg.TimeCfgList[gomdx.TDMinute] = &gomdx.TimeCfg{
+		Type:     gomdx.TDMinute,
 		LiftTime: 1,
-		CalcList: map[cfg.CalcType]bool{cfg.CTCount: true, cfg.CTValue: true, cfg.CTMax: true, cfg.CTMin: true},
+		CalcList: map[gomdx.CalcType]bool{gomdx.CTCount: true, gomdx.CTValue: true, gomdx.CTMax: true, gomdx.CTMin: true},
 	}
 
 	engine.Cfg.Add(eventCfg)
@@ -49,7 +48,7 @@ func main() {
 	engine.Update(ownerId, eventType3, "new", 2)
 	engine.Update(ownerId, eventType3, "new", 5)
 
-	res, _ := engine.QueryOne(ownerId, eventType3, "new", cfg.TDMinute, time.Now())
+	res, _ := engine.QueryOne(ownerId, eventType3, "new", gomdx.TDMinute, time.Now())
 	resByte, _ := json.Marshal(res)
 	fmt.Println(string(resByte))
 
