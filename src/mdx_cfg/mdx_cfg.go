@@ -25,12 +25,12 @@ const (
 var DefaultEventCfg = &EventCfg{}
 
 func init() {
-	DefaultEventCfg.TimeCfgList = make([]*TimeCfg, 0)
-	DefaultEventCfg.TimeCfgList = append(DefaultEventCfg.TimeCfgList, &TimeCfg{
+	DefaultEventCfg.TimeCfgList = make(map[TimeDimension]*TimeCfg)
+	DefaultEventCfg.TimeCfgList[TDEver] = &TimeCfg{
 		Type:     TDEver,
 		LiftTime: -1,
-		CalcList: []CalcType{CTCount, CTValue},
-	})
+		CalcList: map[CalcType]bool{CTCount: true, CTValue: true},
+	}
 }
 
 type Cfg struct {
@@ -40,14 +40,14 @@ type Cfg struct {
 }
 
 type EventCfg struct {
-	EventType   string     `yaml:"event_type" json:"event_type,omitempty"`
-	TimeCfgList []*TimeCfg `yaml:"time_cfg_list" json:"time_cfg_list,omitempty" `
+	EventType   string                     `yaml:"event_type" json:"event_type,omitempty"`
+	TimeCfgList map[TimeDimension]*TimeCfg `yaml:"time_cfg_list" json:"time_cfg_list,omitempty" `
 }
 
 type TimeCfg struct {
-	Type     TimeDimension `yaml:"type" json:"type,omitempty"`
-	LiftTime int32         `yaml:"lift_time" json:"lift_time,omitempty" `
-	CalcList []CalcType    `yaml:"calc_list" json:"calc_list,omitempty" `
+	Type     TimeDimension     `yaml:"type" json:"type,omitempty"`
+	LiftTime int32             `yaml:"lift_time" json:"lift_time,omitempty" `
+	CalcList map[CalcType]bool `yaml:"calc_list" json:"calc_list,omitempty" `
 }
 
 // Add 添加一个事件的配置 如果已存在该事件，则覆盖

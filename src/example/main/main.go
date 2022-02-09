@@ -36,13 +36,13 @@ func main() {
 	eventType3 := "god"
 	eventCfg := &mdx_cfg.EventCfg{
 		EventType:   eventType3,
-		TimeCfgList: make([]*mdx_cfg.TimeCfg, 0),
+		TimeCfgList: make(map[mdx_cfg.TimeDimension]*mdx_cfg.TimeCfg),
 	}
-	eventCfg.TimeCfgList = append(eventCfg.TimeCfgList, &mdx_cfg.TimeCfg{
+	eventCfg.TimeCfgList[mdx_cfg.TDMinute] = &mdx_cfg.TimeCfg{
 		Type:     mdx_cfg.TDMinute,
 		LiftTime: 1,
-		CalcList: []mdx_cfg.CalcType{mdx_cfg.CTCount, mdx_cfg.CTValue, mdx_cfg.CTMax, mdx_cfg.CTMin},
-	})
+		CalcList: map[mdx_cfg.CalcType]bool{mdx_cfg.CTCount: true, mdx_cfg.CTValue: true, mdx_cfg.CTMax: true, mdx_cfg.CTMin: true},
+	}
 
 	engine.Cfg.Add(eventCfg)
 	engine.Update(ownerId, eventType3, "new", 1)
