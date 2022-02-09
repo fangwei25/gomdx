@@ -18,7 +18,11 @@ type DataSource struct {
 	Cache map[string]FiledData
 }
 
-func (s DataSource) Increase(key, field string, v int64, expireTime time.Duration) (newV int64, err error) {
+func (s DataSource) Expire(key string, expireTime time.Duration) (bool, error) {
+	return true, nil
+}
+
+func (s DataSource) Increase(key, field string, v int64) (newV int64, err error) {
 	fData, ok := s.Cache[key]
 	if !ok {
 		fData = make(map[string]int64)
@@ -31,7 +35,7 @@ func (s DataSource) Increase(key, field string, v int64, expireTime time.Duratio
 }
 
 // UpdateMax 更新最大值
-func (s DataSource) UpdateMax(key, field string, v int64, expireTime time.Duration) (newV int64, err error) {
+func (s DataSource) UpdateMax(key, field string, v int64) (newV int64, err error) {
 	fData, ok := s.Cache[key]
 	if !ok {
 		fData = make(map[string]int64)
@@ -47,7 +51,7 @@ func (s DataSource) UpdateMax(key, field string, v int64, expireTime time.Durati
 }
 
 // UpdateMinus 更新最小值
-func (s DataSource) UpdateMinus(key, field string, v int64, expireTime time.Duration) (newV int64, err error) {
+func (s DataSource) UpdateMinus(key, field string, v int64) (newV int64, err error) {
 	fData, ok := s.Cache[key]
 	if !ok {
 		fData = make(map[string]int64)

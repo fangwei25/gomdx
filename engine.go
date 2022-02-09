@@ -6,11 +6,11 @@ import (
 )
 
 type Engine struct {
-	DS  datasource.DataSourcer
+	DS  datasource.Datasourcer
 	Cfg *Cfg
 }
 
-func CreateEngine(ds datasource.DataSourcer, cfg *Cfg) *Engine {
+func CreateEngine(ds datasource.Datasourcer, cfg *Cfg) *Engine {
 	return &Engine{
 		DS:  ds,
 		Cfg: cfg,

@@ -5,11 +5,13 @@ import "time"
 // Updater 更新
 type Updater interface {
 	// Increase 累加值（通过field和v可实现累加数值和累加计数两种作用）
-	Increase(key, field string, v int64, expireTime time.Duration) (newV int64, err error)
+	Increase(key, field string, v int64) (newV int64, err error)
 	// UpdateMax 更新最大值
-	UpdateMax(key, field string, v int64, expireTime time.Duration) (newV int64, err error)
+	UpdateMax(key, field string, v int64) (newV int64, err error)
 	// UpdateMinus 更新最小值
-	UpdateMinus(key, field string, v int64, expireTime time.Duration) (newV int64, err error)
+	UpdateMinus(key, field string, v int64) (newV int64, err error)
+	// Expire 设置超时
+	Expire(key string, expireTime time.Duration) (bool, error)
 }
 
 // Querier 查询
@@ -22,7 +24,7 @@ type Querier interface {
 	QueryAll(key string) (values map[string]int64, err error)
 }
 
-type DataSourcer interface {
+type Datasourcer interface {
 	Updater
 	Querier
 }

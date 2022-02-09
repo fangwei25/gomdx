@@ -28,16 +28,19 @@ func (e Engine) UpdateByTimeDimension(key, field string, value int64, expire tim
 		fieldExt := e.GenField(field, calcType)
 		switch calcType {
 		case CTCount:
-			_, err = e.DS.Increase(key, fieldExt, 1, expire)
+			_, err = e.DS.Increase(key, fieldExt, 1)
 		case CTValue:
-			_, err = e.DS.Increase(key, fieldExt, value, expire)
+			_, err = e.DS.Increase(key, fieldExt, value)
 		case CTMax:
-			_, err = e.DS.UpdateMax(key, fieldExt, value, expire)
+			_, err = e.DS.UpdateMax(key, fieldExt, value)
 		case CTMin:
-			_, err = e.DS.UpdateMinus(key, fieldExt, value, expire)
+			_, err = e.DS.UpdateMinus(key, fieldExt, value)
 		}
 		if err != nil {
 			fmt.Printf("Engine.UpdateByTimeDimension failed, key=%s, field=%s, value=%d, err: %v", key, field, value, err)
 		}
+	}
+	if expire != -1 {
+		_, _ = e.DS.Expire(key, expire)
 	}
 }

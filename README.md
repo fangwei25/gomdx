@@ -3,7 +3,6 @@
 [![Source graph](https://sourcegraph.com/github.com/fangwei25/gomdx/-/badge.svg?style=flat-square)](https://sourcegraph.com/github.com/fangwei25/gomdx?badge)
 [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/fangwei25/gomdx)
 [![Go Report Card](https://goreportcard.com/badge/github.com/fangwei25/gomdx?style=flat-square)](https://goreportcard.com/report/github.com/fangwei25/gomdx)
-[![Build Status](https://github.ruijc.com:20443/api/badges/fangwei25/gomdx/status.svg)](https://github.ruijc.com:20443/fangwei25/gomdx)
 [![Codecov](https://img.shields.io/codecov/c/github/fangwei25/gomdx.svg?style=flat-square)](https://codecov.io/gh/fangwei25/gomdx)
 [![License](https://img.shields.io/github/license/fangwei25/gomdx)](https://raw.githubusercontent.com/fangwei25/gomdx/master/LICENSE)
 
@@ -17,10 +16,10 @@ gomdx 是一个基于golang的多维度数据统计和查询库
 它支持自定义数据源
 
     库中计划提供三种数据源：
-        fake data source:   用于开发、演示的数据源，直接将函数调用参数打印到标准输出，不做数据统计
-        memery data source: 内存记录，数据直接记录于进程内存中，进程停止即销毁
-        redis data source:  redis数据源，数据记录于指定的redis中
-    当然，你还可以自定自己的数据源，只要满足 datasource/idatasource.go中的DataSourcer接口即可
+        fake:   用于开发、演示的数据源，直接将函数调用参数打印到标准输出，不做数据统计
+        memery: 内存记录，数据直接记录于进程内存中，进程停止即销毁
+        redis:  redis数据源，数据记录于指定的redis中
+当然，你还可以自定自己的数据源，只要满足 [datasource/idatasource.go](./datasource/idatasource.go) 中的DataSourcer接口即可
 
 ## 如何使用
 
