@@ -1,9 +1,7 @@
 # gomdx
 
 [![Source graph](https://sourcegraph.com/github.com/fangwei25/gomdx/-/badge.svg?style=flat-square)](https://sourcegraph.com/github.com/fangwei25/gomdx?badge)
-[![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/fangwei25/gomdx)
 [![Go Report Card](https://goreportcard.com/badge/github.com/fangwei25/gomdx?style=flat-square)](https://goreportcard.com/report/github.com/fangwei25/gomdx)
-[![Codecov](https://img.shields.io/codecov/c/github/fangwei25/gomdx.svg?style=flat-square)](https://codecov.io/gh/fangwei25/gomdx)
 [![License](https://img.shields.io/github/license/fangwei25/gomdx)](https://raw.githubusercontent.com/fangwei25/gomdx/master/LICENSE)
 
 gomdx 是一个基于golang的多维度数据统计和查询库
@@ -37,4 +35,5 @@ gomdx 是一个基于golang的多维度数据统计和查询库
 ## 其它项目推荐
  
 [盘古](https://github.com/pangum/pangu) 一个Golang应用程序快速开发框架
+
 [gex](https://github.com/fangwei25/gomdx) Golang外部命令执行扩展库
